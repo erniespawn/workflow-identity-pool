@@ -1,4 +1,4 @@
-# Version `1`
+# Version `2`
 
 export PROJECT_ID="INSERT-PROJECT-ID"
 export PROJECT_NUMBER="INSERT-PROJECT-NUMBER"
