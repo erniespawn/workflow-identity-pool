@@ -1,0 +1,117 @@
+
+
+export PROJECT_ID="INSERT-PROJECT-ID"
+export PROJECT_NUMBER="INSERT-PROJECT-NUMBER"
+export DEV_BUCKET="INSERT-DEV-BUCKET-NAME"
+export PRD_BUCKET="INSERT-PRD-BUCKET-NAME"
+
+gcloud storage buckets create gs://$DEV_BUCKET --project=$PROJECT_ID --default-storage-class=STANDARD --location=EUROPE-WEST1 --uniform-bucket-level-access
+
+gcloud storage buckets create gs://$PRD_BUCKET --project=$PROJECT_ID --default-storage-class=STANDARD --location=EUROPE-WEST1 --uniform-bucket-level-access
+
+gcloud iam workload-identity-pools create github \
+    --project=$PROJECT_ID \
+    --location="global" \
+    --description="GitHub pool" \
+    --display-name="GitHub pool"
+
+gcloud iam workload-identity-pools providers create-oidc "github" \
+  --project="${PROJECT_ID}" \
+  --location="global" \
+  --workload-identity-pool="github" \
+  --display-name="GitHub provider" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.workflow_ref=assertion.job_workflow_ref,attribute.event_name=assertion.event_name" \
+  --issuer-uri="https://token.actions.githubusercontent.com"
+
+gcloud iam service-accounts create bucket-dev \
+    --project=$PROJECT_ID \
+    --description="SA with access to the DEV Bucket" \
+    --display-name="Bucket Reader DEV"
+
+gcloud iam service-accounts create bucket-prd \
+    --project=$PROJECT_ID \
+    --description="SA with access to the PRD Bucket" \
+    --display-name="Bucket Reader PRD"
+
+gcloud storage buckets add-iam-policy-binding gs://${DEV_BUCKET} \
+  --member=serviceAccount:bucket-dev@${PROJECT_ID}.iam.gserviceaccount.com \
+  --role=roles/storage.objectViewer
+
+gcloud storage buckets add-iam-policy-binding gs://${PRD_BUCKET} \
+  --member=serviceAccount:bucket-prd@${PROJECT_ID}.iam.gserviceaccount.com \
+  --role=roles/storage.objectViewer
+
+gcloud iam service-accounts add-iam-policy-binding "bucket-dev@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github/attribute.event_name/pull_request"
+
+
+gcloud iam service-accounts add-iam-policy-binding "bucket-prd@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github/attribute.workflow_ref/{yourGitHub}}/{yourRepo}}/.github/workflows/multi-id.yaml@refs/heads/main"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# document https://cloud.google.com/iam/docs/manage-workload-identity-pools-providers#iam-workload-pools-list-gcloud
+
+gcloud iam workload-identity-pools list --location=global
+
+gcloud iam workload-identity-pools describe github  --location=global
+
+export PROJECT_ID="github-wif-88"
+export PROJECT_NUMBER="590883794651"
+export DEV_BUCKET="insert-gh-dev"
+export PRD_BUCKET="insert-gh-prd"
+
+gcloud storage buckets create gs://$DEV_BUCKET --project=$PROJECT_ID --default-storage-class=STANDARD --location=EUROPE-WEST1 --uniform-bucket-level-access
+
+gcloud storage buckets create gs://$PRD_BUCKET --project=$PROJECT_ID --default-storage-class=STANDARD --location=EUROPE-WEST1 --uniform-bucket-level-access
+
+
+gcloud storage buckets add-iam-policy-binding gs://${PRD_BUCKET} \
+  --member=serviceAccount:github-wif-88@github-wif-88.iam.gserviceaccount.com \
+  --role=roles/storage.objectViewer --role=roles/iam.serviceAccountTokenCreator
+
+
+gcloud iam service-accounts add-iam-policy-binding "bucket-prd@github-wif-88.iam.gserviceaccount.com" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github/attribute.workflow_ref/erniespawn/testtokien/.github/workflows/multi-id.yaml@refs/heads/main"
+
+
+Deze command heeft 't opgelost'
+ernie@debianHome:~$
+ernie@debianHome:~$ gcloud config get-value account
+github-wif-88@github-wif-88.iam.gserviceaccount.com
+ernie@debianHome:~$ gcloud auth login
+
+
+gcloud iam service-accounts add-iam-policy-binding     github-wif-88@github-wif-88.iam.gserviceaccount.com     --member='user:erniespawn@gmail.com'     --role='roles/iam.serviceAccountTokenCreator'
+
+bindings:
+- members:
+  - principalSet://iam.googleapis.com/projects/590883794651/locations/global/workloadIdentityPools/github/attribute.workflow_ref/erniespawn/workload-identity-federation/.github/workflows/multi-id.yaml@refs/heads/main
+  role: roles/iam.workloadIdentityUser
+etag: BwYRrJB1NOI=
+version: 1
+
+
+
+gcloud iam service-accounts remove-iam-policy-binding \
+            bucket-prd@github-wif-88.iam.gserviceaccount.com \
+            --member='principalSet://iam.googleapis.com/projects/590883794651/locations/global/workloadIdentityPools/github/attribute.workflow_ref/erniespawn/workload-identity-federation/.github/workflows/multi-id.yaml@refs/heads/main' --role='roles/iam.workloadIdentityUser'
