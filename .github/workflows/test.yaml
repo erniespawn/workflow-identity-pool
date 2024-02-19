@@ -35,6 +35,10 @@ jobs:
     steps:
       - name: Init some vars
         id: env_vars
-        run: "echo "step main init"
+        run:  "step main init"
  
           
+  test-code-go:
+    needs: [main_init]
+    name: Test Golang code
+    run: echo "test-code-go"
