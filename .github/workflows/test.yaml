@@ -2,29 +2,14 @@ on: push
 
 
 jobs:
-    project-a-or-project-b:
-        runs-on: ubuntu-latest
-        name: Project A or Project B
-
-        steps:
-
-        - name: Checkout Main repository
-          uses: actions/checkout@v2
-          with:
-            path: ./tmp
-
-        - uses: actions/setup-go@v1
-          with:
-            go-version: '1.9.3' # The Go version to download (if necessary) and use.
-
-        - name: Run Main Repository 
-          id: main
-          run: echo "::set-output name=OUTPUT::$OUTPUT"
-            
-
-        - name: Run Project A
-          run: echo "Run Project A"
-
-        - name: Run Project B
-          run: echo "Run Project B"
+  example_matrix:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-20.04]
+        version: [10, 12, 14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
             
