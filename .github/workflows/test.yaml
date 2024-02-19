@@ -27,14 +27,10 @@ jobs:
         id: env_vars
         run:  echo "step main init"
  
-
-  test-code-go:
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: echo "test-code-go"
+ jobs:
+  my_first_job:
+    name: My first job
+  my_second_job:
+    name: My second job
       
 
