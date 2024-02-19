@@ -1,16 +1,6 @@
 on: push
 
-jobs:
-    project-a-or-project-b:
-        runs-on: ubuntu-latest
-        name: Project A or Project B
 
-        steps:
-
-        - name: Checkout Main repository
-          run: echo "Hallo how are you?"
-
-          
 
 env:
   LC_ALL: C.UTF-8
