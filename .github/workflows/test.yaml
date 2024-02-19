@@ -9,6 +9,6 @@ jobs:
 
         - name: Checkout Main repository
           uses: actions/checkout@v2
-          echo "::set-output name=OUTPUT::$OUTPUT"
+          run: echo "Hallo how are you?"
 
           
