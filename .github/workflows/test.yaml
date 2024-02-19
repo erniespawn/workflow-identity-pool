@@ -27,7 +27,7 @@ jobs:
         id: env_vars
         run:  echo "step main init"
  
- jobs:
+jobs:
   my_first_job:
     name: My first job
   my_second_job:
