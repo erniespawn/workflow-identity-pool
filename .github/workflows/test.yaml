@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Init some vars
         id: env_vars
-        run:  "step main init"
+        run:  echo "step main init"
  
           
   test-code-go:
