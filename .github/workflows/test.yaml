@@ -11,3 +11,30 @@ jobs:
           run: echo "Hallo how are you?"
 
           
+
+env:
+  LC_ALL: C.UTF-8
+  LANG: C.UTF-8
+  REGISTRY_DOMAIN: eu.gcr.io
+  REGISTRY_URL: eu.gcr.io/mb-dotcom-prod
+
+jobs:
+  ################################################################################
+  # Any inits, e.g: helps with env missing in with.<with_id> context
+  ################################################################################
+
+  main_init:
+    name: Init
+    runs-on: ubuntu-latest
+    outputs:
+      APP_NAME: ${{  steps.env_vars.outputs.APP_NAME  }}
+      REGISTRY_DOMAIN: ${{  steps.env_vars.outputs.REGISTRY_DOMAIN  }}
+      REGISTRY_URL: ${{  steps.env_vars.outputs.REGISTRY_URL  }}
+      FULL_IMG_REF: ${{  steps.env_vars.outputs.FULL_IMG_REF  }}
+      IMG_REF: ${{  steps.env_vars.outputs.IMG_REF  }}
+    steps:
+      - name: Init some vars
+        id: env_vars
+        run: "echo "step main init"
+ 
+          
