@@ -8,7 +8,6 @@ jobs:
         steps:
 
         - name: Checkout Main repository
-          uses: actions/checkout@v2
           run: echo "Hallo how are you?"
 
           
